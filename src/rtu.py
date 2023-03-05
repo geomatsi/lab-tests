@@ -8,6 +8,7 @@ import sys
 from serial import Serial, PARITY_NONE
 from umodbus.client.serial import rtu
 from umodbus.exceptions import IllegalDataValueError
+import umodbus.client.serial.redundancy_check as crc
 
 
 def get_serial_port(name):
@@ -36,20 +37,9 @@ def cmd_relay(args):
         sys.exit(0)
 
     if hasattr(args, 'flip'):
-        # For some reason write_single_coil throws IllegalDataValueError exception:
-        # req = rtu.write_single_coil(slave_id=args.device, address=args.flip, value=0x5500)
-        reqs = [
-            b'\x01\x05\x00\x00\x55\x00\xf2\x9a',
-            b'\x01\x05\x00\x01\x55\x00\xa3\x5a',
-            b'\x01\x05\x00\x02\x55\x00\x53\x5a',
-            b'\x01\x05\x00\x03\x55\x00\x02\x9a',
-            b'\x01\x05\x00\x04\x55\x00\xb3\x5b',
-            b'\x01\x05\x00\x05\x55\x00\xe2\x9b',
-            b'\x01\x05\x00\x06\x55\x00\x12\x9b',
-            b'\x01\x05\x00\x07\x55\x00\x43\x5b'
-        ]
-
-        req = reqs[args.flip]
+        # flip command value b'\x55\x00' is not compliant with modbus spec
+        # so create request manually to avoid umodbus exception 
+        req = crc.add_crc(bytes([args.device]) + b'\x05\x00' + bytes([args.flip]) + b'\x55\x00')
         print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         try:
             rtu.send_message(req, serial_port)
@@ -76,8 +66,6 @@ def cmd_relays(args):
     """ command: control all relays at once """
     serial_port = get_serial_port('/dev/ttyUSB0')
 
-    print("BOOO {}".format(args))
-
     if hasattr(args, 'action'):
         if args.action == 'read':
             req = rtu.read_coils(slave_id=args.device, starting_address=0, quantity=8)
@@ -88,9 +76,9 @@ def cmd_relays(args):
             else:
                 print(rsp)
         elif args.action == 'flip':
-            # For some reason write_single_coil throws IllegalDataValueError exception:
-            # req = rtu.write_single_coil(slave_id=args.device, address=0, value=0x5a00)
-            req = b'\x01\x05\x00\x00\x5a\x00\xf7\x6a';
+            # flip-all command value b'\x5a\x00' is not compliant with modbus spec
+            # so create request manually to avoid umodbus exception 
+            req = crc.add_crc(bytes([args.device]) + b'\x05\x00\x00\x5a\x00')
             print("request: {}".format(':'.join(format(x, '02x') for x in req)))
             try:
                 rtu.send_message(req, serial_port)
