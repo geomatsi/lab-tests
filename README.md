@@ -1,7 +1,80 @@
-## Virtualenv
+# Modbus power switch devices
 
-$ source /usr/bin/virtualenvwrapper.sh
-$ workon modbus-tests
+## Supported Devices
+
+[Modbus RTU 8 Channel Relay Switch](https://aliexpress.ru/item/4001171723396.html)
+
+![alt text](docs/ps1.jpg)
+
+## Using simple CLI
+
+Simple command line tool src/rtu.py based on [umodbus](https://umodbus.readthedocs.io/) module:
+
+```bash 
+$ ./src/rtu.py 
+[sudo] password for matsi: 
+usage: rtu.py [-h] [-d DEVICE] [-s SERVER] {scan,pins,relay,relays} ...
+
+positional arguments:
+  {scan,pins,relay,relays}
+                        commands
+    scan                scan modbus rtu device address
+    pins                read input pins
+    relay               relay commands
+    relays              multi-relays commands
+
+options:
+  -h, --help            show this help message and exit
+  -d DEVICE, --device DEVICE
+                        serial device for modbus connection
+  -s SERVER, --server SERVER
+                        modbus rtu server address
+```
+
+Basic input pin functions:
+
+```bash
+$ ./src/rtu.py pins -h
+usage: rtu.py pins [-h] [-p {0,1,2,3,4,5,6,7}]
+
+options:
+  -h, --help            show this help message and exit
+  -p {0,1,2,3,4,5,6,7}, --pin {0,1,2,3,4,5,6,7}
+                        select input pin
+
+$ ./src/rtu.py pins
+[0, 0, 0, 0, 0, 1, 0, 0]
+
+$ ./src/rtu.py pins --pin 6
+0
+```
+
+Basic relay functions:
+
+```bash
+$ ./src/rtu.py relay -h
+usage: rtu.py relay [-h] {on,off,flip,read} ...
+
+positional arguments:
+  {on,off,flip,read}  commands
+    on                turn on relay
+    off               turn off relay
+    flip              flip relay state
+    read              read relay state
+
+options:
+  -h, --help          show this help message and exit
+
+$ ./src/rtu.py relay on 7
+
+$ ./src/rtu.py relay read 7
+1
+
+$ ./src/rtu.py relay flip 7
+
+$ ./src/rtu.py relay read 7
+0
+```
 
 ## Using modbus-cli
 
