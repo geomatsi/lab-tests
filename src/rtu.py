@@ -72,6 +72,37 @@ def cmd_relay(args):
     sys.exit(0)
 
 
+def cmd_relays(args):
+    """ command: control all relays at once """
+    serial_port = get_serial_port('/dev/ttyUSB0')
+
+    print("BOOO {}".format(args))
+
+    if hasattr(args, 'action'):
+        if args.action == 'read':
+            req = rtu.read_coils(slave_id=args.device, starting_address=0, quantity=8)
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+            rsp = rtu.send_message(req, serial_port)
+            if args.text:
+                print(format(':'.join("ON" if x else "OFF" for x in rsp)))
+            else:
+                print(rsp)
+        elif args.action == 'flip':
+            # For some reason write_single_coil throws IllegalDataValueError exception:
+            # req = rtu.write_single_coil(slave_id=args.device, address=0, value=0x5a00)
+            req = b'\x01\x05\x00\x00\x5a\x00\xf7\x6a';
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+            try:
+                rtu.send_message(req, serial_port)
+            except IllegalDataValueError:
+                pass
+        else:
+            print("unsupported action: {}", args.action)
+
+    serial_port.close()
+    sys.exit(0)
+
+
 def cmd_pins(args):
     """ command: read input pins"""
     serial_port = get_serial_port('/dev/ttyUSB0')
@@ -148,6 +179,18 @@ def create_parser():
                               help='report relay status in text form')
 
     relay_parser.set_defaults(func=cmd_relay)
+
+    # relays command
+    relays_parser = subparsers.add_parser('relays', help='multi-relays commands')
+    relays_parser.add_argument('-d', '--device', action='store', type=int, default=1, required=False,
+                              dest='device', help='modbus rtu device address')
+    relays_parser.add_argument('--text', action='store_true', required=False,
+                               dest='text', help='report relays status in text form')
+    supported_actions = ['read', 'flip']
+    relays_parser.add_argument('action', action='store', type=str,
+                               choices=supported_actions, help='multi-relays command')
+
+    relays_parser.set_defaults(func=cmd_relays)
 
     return parser
 
