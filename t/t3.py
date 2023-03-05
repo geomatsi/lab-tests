@@ -16,6 +16,7 @@ def get_serial_port(name):
 
     return port
 
+
 # test3: enable/disable relays
 
 serial_port = get_serial_port('/dev/ttyUSB0')

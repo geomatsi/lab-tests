@@ -40,7 +40,7 @@ def cmd_relay(args):
 
     if hasattr(args, 'flip'):
         # flip command value b'\x55\x00' is not compliant with modbus spec
-        # so create request manually to avoid umodbus exception 
+        # so create request manually to avoid umodbus exception
         req = crc.add_crc(bytes([args.server]) + b'\x05\x00' + bytes([args.flip]) + b'\x55\x00')
         if args.verbose:
             print("request: {}".format(':'.join(format(x, '02x') for x in req)))
@@ -82,7 +82,7 @@ def cmd_relays(args):
                 print(rsp)
         elif args.action == 'flip':
             # flip-all command value b'\x5a\x00' is not compliant with modbus spec
-            # so create request manually to avoid umodbus exception 
+            # so create request manually to avoid umodbus exception
             req = crc.add_crc(bytes([args.server]) + b'\x05\x00\x00\x5a\x00')
             if args.verbose:
                 print("request: {}".format(':'.join(format(x, '02x') for x in req)))
@@ -161,11 +161,11 @@ def create_parser():
 
     enable_parser = relay_subparsers.add_parser('on', help='turn on relay')
     enable_parser.add_argument('on', action='store', type=int, choices=supported_relays,
-                             help='relay number')
+                               help='relay number')
 
     disable_parser = relay_subparsers.add_parser('off', help='turn off relay')
     disable_parser.add_argument('off', action='store', type=int, choices=supported_relays,
-                             help='relay number')
+                                help='relay number')
 
     flip_parser = relay_subparsers.add_parser('flip', help='flip relay state')
     flip_parser.add_argument('flip', action='store', type=int, choices=supported_relays,
@@ -175,7 +175,7 @@ def create_parser():
     read_parser.add_argument('read', action='store', type=int, choices=supported_relays,
                              help='relay number')
     read_parser.add_argument('--text', action='store_true', required=False, dest='text',
-                              help='report relay status in text form')
+                             help='report relay status in text form')
 
     relay_parser.set_defaults(func=cmd_relay)
 

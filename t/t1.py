@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import time
-
 from serial import Serial, PARITY_NONE
 from umodbus.client.serial import rtu
 
@@ -15,6 +13,7 @@ def get_serial_port(name):
     # - https://aliexpress.ru/item/1005002115304015.html
 
     return port
+
 
 #  test1: read server address
 
