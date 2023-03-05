@@ -24,14 +24,16 @@ def cmd_relay(args):
 
     if hasattr(args, 'on'):
         req = rtu.write_single_coil(slave_id=args.server, address=args.on, value=0xff00)
-        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+        if args.verbose:
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rtu.send_message(req, serial_port)
         serial_port.close()
         sys.exit(0)
 
     if hasattr(args, 'off'):
         req = rtu.write_single_coil(slave_id=args.server, address=args.off, value=0)
-        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+        if args.verbose:
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rtu.send_message(req, serial_port)
         serial_port.close()
         sys.exit(0)
@@ -40,7 +42,8 @@ def cmd_relay(args):
         # flip command value b'\x55\x00' is not compliant with modbus spec
         # so create request manually to avoid umodbus exception 
         req = crc.add_crc(bytes([args.server]) + b'\x05\x00' + bytes([args.flip]) + b'\x55\x00')
-        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+        if args.verbose:
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         try:
             rtu.send_message(req, serial_port)
         except IllegalDataValueError:
@@ -50,7 +53,8 @@ def cmd_relay(args):
 
     if hasattr(args, 'read'):
         req = rtu.read_coils(slave_id=args.server, starting_address=args.read, quantity=1)
-        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+        if args.verbose:
+            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rsp = rtu.send_message(req, serial_port)
         if args.text:
             print(format("ON" if rsp[0] else "OFF"))
@@ -69,7 +73,8 @@ def cmd_relays(args):
     if hasattr(args, 'action'):
         if args.action == 'read':
             req = rtu.read_coils(slave_id=args.server, starting_address=0, quantity=8)
-            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+            if args.verbose:
+                print("request: {}".format(':'.join(format(x, '02x') for x in req)))
             rsp = rtu.send_message(req, serial_port)
             if args.text:
                 print(format(':'.join("ON" if x else "OFF" for x in rsp)))
@@ -79,7 +84,8 @@ def cmd_relays(args):
             # flip-all command value b'\x5a\x00' is not compliant with modbus spec
             # so create request manually to avoid umodbus exception 
             req = crc.add_crc(bytes([args.server]) + b'\x05\x00\x00\x5a\x00')
-            print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+            if args.verbose:
+                print("request: {}".format(':'.join(format(x, '02x') for x in req)))
             try:
                 rtu.send_message(req, serial_port)
             except IllegalDataValueError:
@@ -96,7 +102,8 @@ def cmd_pins(args):
     serial_port = get_serial_port(args.device)
 
     req = rtu.read_discrete_inputs(slave_id=args.server, starting_address=0, quantity=8)
-    print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+    if args.verbose:
+        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
     rsp = rtu.send_message(req, serial_port)
 
     if args.pin is not None:
@@ -113,7 +120,8 @@ def cmd_scan(args):
     serial_port = get_serial_port(args.device)
 
     req = rtu.read_holding_registers(slave_id=0, starting_address=0, quantity=1)
-    print("request: {}".format(':'.join(format(x, '02x') for x in req)))
+    if args.verbose:
+        print("request: {}".format(':'.join(format(x, '02x') for x in req)))
     rsp = rtu.send_message(req, serial_port)
     print(rsp[0])
 
@@ -131,6 +139,8 @@ def create_parser():
                         required=False, dest='device', help='serial device for modbus connection')
     parser.add_argument('-s', '--server', action='store', type=int, default=1, required=False,
                               dest='server', help='modbus rtu server address')
+    parser.add_argument('-v', '--verbose', action='store_true', required=False,
+                              dest='verbose', help='verbose mode')
 
     # scan command
     scan_parser = subparsers.add_parser('scan', help='scan modbus rtu device address')
