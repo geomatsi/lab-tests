@@ -20,7 +20,7 @@ def get_serial_port(name):
 
 def cmd_relay(args):
     """ command: relay control """
-    serial_port = get_serial_port('/dev/ttyUSB0')
+    serial_port = get_serial_port(args.serial)
 
     if hasattr(args, 'on'):
         req = rtu.write_single_coil(slave_id=args.device, address=args.on, value=0xff00)
@@ -64,7 +64,7 @@ def cmd_relay(args):
 
 def cmd_relays(args):
     """ command: control all relays at once """
-    serial_port = get_serial_port('/dev/ttyUSB0')
+    serial_port = get_serial_port(args.serial)
 
     if hasattr(args, 'action'):
         if args.action == 'read':
@@ -93,7 +93,7 @@ def cmd_relays(args):
 
 def cmd_pins(args):
     """ command: read input pins"""
-    serial_port = get_serial_port('/dev/ttyUSB0')
+    serial_port = get_serial_port(args.serial)
 
     req = rtu.read_discrete_inputs(slave_id=args.device, starting_address=0, quantity=8)
     print("request: {}".format(':'.join(format(x, '02x') for x in req)))
@@ -110,7 +110,7 @@ def cmd_pins(args):
 
 def cmd_scan(args):
     """ command: scan modbus rtu device address """
-    serial_port = get_serial_port('/dev/ttyUSB0')
+    serial_port = get_serial_port(args.serial)
 
     req = rtu.read_holding_registers(slave_id=0, starting_address=0, quantity=1)
     print("request: {}".format(':'.join(format(x, '02x') for x in req)))
@@ -125,6 +125,10 @@ def create_parser():
     """ Parse command line arguments """
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help='commands')
+
+    # global options
+    parser.add_argument('-s', '--serial', action='store', type=str, default='/dev/ttyUSB0',
+                        required=False, dest='serial', help='serial port for modbus connection')
 
     # scan command
     scan_parser = subparsers.add_parser('scan', help='scan modbus rtu device address')
