@@ -20,17 +20,17 @@ def get_serial_port(name):
 
 def cmd_relay(args):
     """ command: relay control """
-    serial_port = get_serial_port(args.serial)
+    serial_port = get_serial_port(args.device)
 
     if hasattr(args, 'on'):
-        req = rtu.write_single_coil(slave_id=args.device, address=args.on, value=0xff00)
+        req = rtu.write_single_coil(slave_id=args.server, address=args.on, value=0xff00)
         print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rtu.send_message(req, serial_port)
         serial_port.close()
         sys.exit(0)
 
     if hasattr(args, 'off'):
-        req = rtu.write_single_coil(slave_id=args.device, address=args.off, value=0)
+        req = rtu.write_single_coil(slave_id=args.server, address=args.off, value=0)
         print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rtu.send_message(req, serial_port)
         serial_port.close()
@@ -39,7 +39,7 @@ def cmd_relay(args):
     if hasattr(args, 'flip'):
         # flip command value b'\x55\x00' is not compliant with modbus spec
         # so create request manually to avoid umodbus exception 
-        req = crc.add_crc(bytes([args.device]) + b'\x05\x00' + bytes([args.flip]) + b'\x55\x00')
+        req = crc.add_crc(bytes([args.server]) + b'\x05\x00' + bytes([args.flip]) + b'\x55\x00')
         print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         try:
             rtu.send_message(req, serial_port)
@@ -49,7 +49,7 @@ def cmd_relay(args):
         sys.exit(0)
 
     if hasattr(args, 'read'):
-        req = rtu.read_coils(slave_id=args.device, starting_address=args.read, quantity=1)
+        req = rtu.read_coils(slave_id=args.server, starting_address=args.read, quantity=1)
         print("request: {}".format(':'.join(format(x, '02x') for x in req)))
         rsp = rtu.send_message(req, serial_port)
         if args.text:
@@ -64,11 +64,11 @@ def cmd_relay(args):
 
 def cmd_relays(args):
     """ command: control all relays at once """
-    serial_port = get_serial_port(args.serial)
+    serial_port = get_serial_port(args.device)
 
     if hasattr(args, 'action'):
         if args.action == 'read':
-            req = rtu.read_coils(slave_id=args.device, starting_address=0, quantity=8)
+            req = rtu.read_coils(slave_id=args.server, starting_address=0, quantity=8)
             print("request: {}".format(':'.join(format(x, '02x') for x in req)))
             rsp = rtu.send_message(req, serial_port)
             if args.text:
@@ -78,7 +78,7 @@ def cmd_relays(args):
         elif args.action == 'flip':
             # flip-all command value b'\x5a\x00' is not compliant with modbus spec
             # so create request manually to avoid umodbus exception 
-            req = crc.add_crc(bytes([args.device]) + b'\x05\x00\x00\x5a\x00')
+            req = crc.add_crc(bytes([args.server]) + b'\x05\x00\x00\x5a\x00')
             print("request: {}".format(':'.join(format(x, '02x') for x in req)))
             try:
                 rtu.send_message(req, serial_port)
@@ -93,9 +93,9 @@ def cmd_relays(args):
 
 def cmd_pins(args):
     """ command: read input pins"""
-    serial_port = get_serial_port(args.serial)
+    serial_port = get_serial_port(args.device)
 
-    req = rtu.read_discrete_inputs(slave_id=args.device, starting_address=0, quantity=8)
+    req = rtu.read_discrete_inputs(slave_id=args.server, starting_address=0, quantity=8)
     print("request: {}".format(':'.join(format(x, '02x') for x in req)))
     rsp = rtu.send_message(req, serial_port)
 
@@ -110,7 +110,7 @@ def cmd_pins(args):
 
 def cmd_scan(args):
     """ command: scan modbus rtu device address """
-    serial_port = get_serial_port(args.serial)
+    serial_port = get_serial_port(args.device)
 
     req = rtu.read_holding_registers(slave_id=0, starting_address=0, quantity=1)
     print("request: {}".format(':'.join(format(x, '02x') for x in req)))
@@ -127,8 +127,10 @@ def create_parser():
     subparsers = parser.add_subparsers(help='commands')
 
     # global options
-    parser.add_argument('-s', '--serial', action='store', type=str, default='/dev/ttyUSB0',
-                        required=False, dest='serial', help='serial port for modbus connection')
+    parser.add_argument('-d', '--device', action='store', type=str, default='/dev/ttyUSB0',
+                        required=False, dest='device', help='serial device for modbus connection')
+    parser.add_argument('-s', '--server', action='store', type=int, default=1, required=False,
+                              dest='server', help='modbus rtu server address')
 
     # scan command
     scan_parser = subparsers.add_parser('scan', help='scan modbus rtu device address')
@@ -136,8 +138,6 @@ def create_parser():
 
     # input pins command
     pins_parser = subparsers.add_parser('pins', help='read input pins')
-    pins_parser.add_argument('-d', '--device', action='store', type=int, default=1, required=False,
-                              dest='device', help='modbus rtu device address')
     supported_pins = [0, 1, 2, 3, 4, 5, 6, 7]
     pins_parser.add_argument('-p', '--pin', action='store', type=int, choices=supported_pins,
                              required=False, dest='pin', help='select input pin')
@@ -146,9 +146,6 @@ def create_parser():
     # relay commands
     relay_parser = subparsers.add_parser('relay', help='relay commands')
     relay_subparsers = relay_parser.add_subparsers(help='commands')
-
-    relay_parser.add_argument('-d', '--device', action='store', type=int, default=1, required=False,
-                              dest='device', help='modbus rtu device address')
 
     supported_relays = [0, 1, 2, 3, 4, 5, 6, 7]
 
@@ -174,8 +171,6 @@ def create_parser():
 
     # relays command
     relays_parser = subparsers.add_parser('relays', help='multi-relays commands')
-    relays_parser.add_argument('-d', '--device', action='store', type=int, default=1, required=False,
-                              dest='device', help='modbus rtu device address')
     relays_parser.add_argument('--text', action='store_true', required=False,
                                dest='text', help='report relays status in text form')
     supported_actions = ['read', 'flip']
