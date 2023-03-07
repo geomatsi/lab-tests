@@ -2,19 +2,15 @@
 
 ![alt text](docs/ps1.jpg)
 
-## Simple CLI
-
-TODO
-
-## Modbus-TCP control using modbus-cli
+## Using modbus-cli tool
 
 Project: https://github.com/favalex/modbus-cli
 
-### Install modbus-cli
+Command line `modbus-cli` is a tool to access both Modbus-RTU and Modbus-TCP
+devices from the command line.
 
-```bash
-$ pip install modbus_cli
-```
+<details>
+<summary>Examples of board control over Modbus-TCP using modbus-cli tool</summary>
 
 ### Read number of relay channels
 
@@ -107,3 +103,16 @@ Parsed 0 registers definitions from 1 files
 ← [1]
 1: 1 0x1
 ```
+</details>
+
+## Using Custom CLI tool
+
+This repository provides a simple example command line tool [rtu.py](src/rtu.py) for this specific device.
+The tool is based on [umodbus](https://umodbus.readthedocs.io/) library.
+  
+<details>
+<summary>Examples of board control over Modbus-RTU using custom tool</summary>
+TODO
+</details>
+
+

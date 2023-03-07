@@ -2,85 +2,15 @@
 
 ![alt text](docs/ps1.jpg)
 
-## Simple CLI
-
-Simple command line tool src/rtu.py based on [umodbus](https://umodbus.readthedocs.io/) module:
-
-```bash 
-$ ./src/rtu.py 
-[sudo] password for matsi: 
-usage: rtu.py [-h] [-d DEVICE] [-s SERVER] {scan,pins,relay,relays} ...
-
-positional arguments:
-  {scan,pins,relay,relays}
-                        commands
-    scan                scan modbus rtu device address
-    pins                read input pins
-    relay               relay commands
-    relays              multi-relays commands
-
-options:
-  -h, --help            show this help message and exit
-  -d DEVICE, --device DEVICE
-                        serial device for modbus connection
-  -s SERVER, --server SERVER
-                        modbus rtu server address
-```
-
-Basic input pin functions:
-
-```bash
-$ ./src/rtu.py pins -h
-usage: rtu.py pins [-h] [-p {0,1,2,3,4,5,6,7}]
-
-options:
-  -h, --help            show this help message and exit
-  -p {0,1,2,3,4,5,6,7}, --pin {0,1,2,3,4,5,6,7}
-                        select input pin
-
-$ ./src/rtu.py pins
-[0, 0, 0, 0, 0, 1, 0, 0]
-
-$ ./src/rtu.py pins --pin 6
-0
-```
-
-Basic relay functions:
-
-```bash
-$ ./src/rtu.py relay -h
-usage: rtu.py relay [-h] {on,off,flip,read} ...
-
-positional arguments:
-  {on,off,flip,read}  commands
-    on                turn on relay
-    off               turn off relay
-    flip              flip relay state
-    read              read relay state
-
-options:
-  -h, --help          show this help message and exit
-
-$ ./src/rtu.py relay on 7
-
-$ ./src/rtu.py relay read 7
-1
-
-$ ./src/rtu.py relay flip 7
-
-$ ./src/rtu.py relay read 7
-0
-```
-
-## Modbus-RTU control using modbus-cli
+## Using modbus-cli tool
 
 Project: https://github.com/favalex/modbus-cli
 
-### Install modbus-cli
+Command line `modbus-cli` is a tool to access both Modbus-RTU and Modbus-TCP
+devices from the command line.
 
-```bash
-$ pip install modbus_cli
-```
+<details>
+<summary>Examples of board control over Modbus-RTU using modbus-cli tool</summary>
 
 ### Get device address
 
@@ -206,3 +136,79 @@ Serial port /dev/ttyUSB0. Parameters: 9600 baud, 1 stop bit(s), parity: N, timeo
 ← [0]
 5: 0 0x0
 ```
+</details>
+
+## Using Custom CLI tool
+
+This repository provides a simple example command line tool [rtu.py](src/rtu.py) for this specific device.
+The tool is based on [umodbus](https://umodbus.readthedocs.io/) library.
+  
+<details>
+<summary>Examples of board control over Modbus-RTU using custom tool</summary>
+
+```bash 
+$ ./src/rtu.py 
+[sudo] password for matsi: 
+usage: rtu.py [-h] [-d DEVICE] [-s SERVER] {scan,pins,relay,relays} ...
+
+positional arguments:
+  {scan,pins,relay,relays}
+                        commands
+    scan                scan modbus rtu device address
+    pins                read input pins
+    relay               relay commands
+    relays              multi-relays commands
+
+options:
+  -h, --help            show this help message and exit
+  -d DEVICE, --device DEVICE
+                        serial device for modbus connection
+  -s SERVER, --server SERVER
+                        modbus rtu server address
+```
+
+Basic input pin functions:
+
+```bash
+$ ./src/rtu.py pins -h
+usage: rtu.py pins [-h] [-p {0,1,2,3,4,5,6,7}]
+
+options:
+  -h, --help            show this help message and exit
+  -p {0,1,2,3,4,5,6,7}, --pin {0,1,2,3,4,5,6,7}
+                        select input pin
+
+$ ./src/rtu.py pins
+[0, 0, 0, 0, 0, 1, 0, 0]
+
+$ ./src/rtu.py pins --pin 6
+0
+```
+
+Basic relay functions:
+
+```bash
+$ ./src/rtu.py relay -h
+usage: rtu.py relay [-h] {on,off,flip,read} ...
+
+positional arguments:
+  {on,off,flip,read}  commands
+    on                turn on relay
+    off               turn off relay
+    flip              flip relay state
+    read              read relay state
+
+options:
+  -h, --help          show this help message and exit
+
+$ ./src/rtu.py relay on 7
+
+$ ./src/rtu.py relay read 7
+1
+
+$ ./src/rtu.py relay flip 7
+
+$ ./src/rtu.py relay read 7
+0
+```
+</details>
