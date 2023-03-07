@@ -1,6 +1,6 @@
 # [Dingtian 2-channel Relay Board](https://www.dingtian-tech.com/en_us/relay2.html)
 
-![alt text](docs/ps1.jpg)
+![alt text](docs/ps0.jpg)
 
 ## Using modbus-cli tool
 

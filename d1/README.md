@@ -1,6 +1,6 @@
 # [Modbus RTU 8 Channel Relay Switch](https://aliexpress.ru/item/4001171723396.html)
 
-![alt text](docs/ps1.jpg)
+![alt text](docs/ps0.jpg)
 
 ## Using modbus-cli tool
 
