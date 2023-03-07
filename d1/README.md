@@ -72,7 +72,7 @@ $ ./src/rtu.py relay read 7
 0
 ```
 
-## Using modbus-cli
+## Modbus-RTU control using modbus-cli
 
 Project: https://github.com/favalex/modbus-cli
 
