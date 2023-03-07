@@ -148,7 +148,6 @@ The tool is based on [umodbus](https://umodbus.readthedocs.io/) library.
 
 ```bash 
 $ ./src/rtu.py 
-[sudo] password for matsi: 
 usage: rtu.py [-h] [-d DEVICE] [-s SERVER] {scan,pins,relay,relays} ...
 
 positional arguments:

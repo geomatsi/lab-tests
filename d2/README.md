@@ -111,8 +111,76 @@ This repository provides a simple example command line tool [rtu.py](src/rtu.py)
 The tool is based on [umodbus](https://umodbus.readthedocs.io/) library.
   
 <details>
-<summary>Examples of board control over Modbus-RTU using custom tool</summary>
-TODO
+<summary>Examples of board control over Modbus-TCP using custom tool</summary>
+
+```bash
+$ ./src/rtu.py
+usage: rtu.py [-h] [-s SERVER] [-p PORT] [-v] {relay,relays} ...
+
+positional arguments:
+  {relay,relays}        commands
+    relay               relay commands
+    relays              multi-relays commands
+
+options:
+  -h, --help            show this help message and exit
+  -s SERVER, --server SERVER
+                        Modbus TCP server IP address
+  -p PORT, --port PORT  Modbus TCP server port
+  -v, --verbose         verbose mode
+```
+
+Basic relay functions:
+
+```bash
+$ ./src/rtu.py relay -h                                                                                                                                                                                                                                                           255 ↵
+usage: rtu.py relay [-h] {on,off,flip,read} ...
+
+positional arguments:
+  {on,off,flip,read}  commands
+    on                turn on relay
+    off               turn off relay
+    flip              flip relay state
+    read              read relay state
+
+options:
+  -h, --help          show this help message and exit
+
+$ ./src/rtu.py -s 192.168.1.100 relay on 1
+
+$ ./src/rtu.py -s 192.168.1.100 relay read 1
+1
+
+$ ./src/rtu.py -s 192.168.1.100 relay flip 2
+
+$ ./src/rtu.py -s 192.168.1.100 relay read 2 --text
+ON
+```
+
+Basic all-relays functions:
+
+```bash
+$ ./src/rtu.py relays -h
+usage: rtu.py relays [-h] [--text] {read,on,off,flip}
+
+positional arguments:
+  {read,on,off,flip}  multi-relays command
+
+options:
+  -h, --help          show this help message and exit
+  --text              report relays status in text form
+
+$ ./src/rtu.py -s 192.168.1.100 relays read --text
+ON:OFF
+
+$ ./src/rtu.py -s 192.168.1.100 relays flip
+
+$ ./src/rtu.py -s 192.168.1.100 relays read
+[0, 1]
+
+$ ./src/rtu.py -s 192.168.1.100 relays off
+
+$ ./src/rtu.py -s 192.168.1.100 relays read
+[0, 0]
+```
 </details>
-
-
