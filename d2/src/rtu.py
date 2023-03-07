@@ -12,6 +12,7 @@ from umodbus.client import tcp
 # Enable values to be signed (default is False).
 conf.SIGNED_VALUES = True
 
+REG_DETECT = 0
 REG_STATUS = 1
 REG_ACTION = 2
 
@@ -122,6 +123,18 @@ def cmd_relays(args):
     sys.exit(0)
 
 
+def cmd_detect(args):
+    """ command: red number of relays on device"""
+    sock = get_server_sock(args.server, args.port)
+    req = tcp.read_holding_registers(slave_id=1, starting_address=REG_DETECT, quantity=1)
+    if args.verbose:
+        print("req: {}".format(':'.join(format(x, '02x') for x in req)))
+    rsp = tcp.send_message(req, sock)
+    print("{}".format(rsp[0]))
+    sock.close()
+    sys.exit(0)
+
+
 def create_parser():
     """ Parse command line arguments """
     parser = argparse.ArgumentParser()
@@ -134,6 +147,10 @@ def create_parser():
                         required=False, dest='port', help='Modbus TCP server port')
     parser.add_argument('-v', '--verbose', action='store_true', required=False,
                               dest='verbose', help='verbose mode')
+
+    # scan command
+    detect_parser = subparsers.add_parser('detect', help='read number of relays on device')
+    detect_parser.set_defaults(func=cmd_detect)
 
     # relay commands
     relay_parser = subparsers.add_parser('relay', help='relay commands')
