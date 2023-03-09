@@ -1,0 +1,26 @@
+targets:
+  main:
+    resources:
+      RawSerialPort:
+        name: "console"
+        port: "/dev/ttyUSB0"
+      ModbusRTU:
+        port: "/dev/ttyUSB1"
+        address: 1
+        speed: 9600
+        timeout: 0.5
+    drivers:
+      SerialDriver:
+        bindings:
+          port: "console"
+      ModbusRTUPowerDriver:
+        coil: 0
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: '=> '
+      ShellDriver:
+        prompt: '# '
+        login_prompt: ' login: '
+        username: 'root'
+      UBootStrategy: {}

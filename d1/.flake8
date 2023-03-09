@@ -1,5 +1,5 @@
 [flake8]
-include = src t
+include = src t labgrid
 exclude = .git,
 max-complexity = 12
 max_line_length = 100 
