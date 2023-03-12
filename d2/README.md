@@ -184,3 +184,29 @@ $ ./src/rtu.py -s 192.168.1.100 relays read
 [0, 0]
 ```
 </details>
+
+## Integration with Labgrid
+
+[Labgrid](https://github.com/labgrid-project/labgrid) is an embedded board control python library with a focus on testing, development and general automation.
+
+<details>
+<summary>Labgrid test automation: communicate with relay switch over Modbus TCP network protocol to control board power</summary>
+
+Directory `labgrid` includes minimal set of software components required to use this power switch in embedded board testing:
+* Labgrid [power driver](labgrid/src/modbus.py) to communicate with relay switch over ModbusTCP protocol
+* Labgrid _local_ [configuraton file](labgrid/local.yaml)
+* Labgrid [fixtures](labgrid/conftest.py) for pytest
+* U-Boot and Linux example [tests](labgrid/tests)
+
+[Setup Labgrid](https://labgrid.readthedocs.io/en/latest/getting_started.html#installation) and run automated U-Boot/Linux tests as follows:
+  
+```bash 
+$ pytest --lg-log --lg-env local.yaml tests/test_uboot.py tests/test_shell.py
+```
+Provided test implements the following steps:
+* power-cycle the board under test using relay switch
+* interrupt boot in U-Boot and run U-Boot tests
+* continue boot to Linux shell
+* login to Linux shell and run Linux tests
+  
+</details>

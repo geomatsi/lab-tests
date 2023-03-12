@@ -1,0 +1,20 @@
+targets:
+  main:
+    resources:
+      RawSerialPort:
+        port: "/dev/ttyUSB0"
+      ModbusTCPCoil:
+        host: "192.168.1.100"
+        coil: 1
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: '=> '
+      ShellDriver:
+        prompt: '# '
+        login_prompt: ' login: '
+        username: 'root'
+      UBootStrategy: {}
