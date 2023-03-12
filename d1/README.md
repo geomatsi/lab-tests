@@ -217,7 +217,7 @@ $ ./src/rtu.py relay read 7
 [Labgrid](https://github.com/labgrid-project/labgrid) is an embedded board control python library with a focus on testing, development and general automation.
 
 <details>
-<summary>Labgrid test automation: embedded board power control using relay switch</summary>
+<summary>Labgrid test automation: communicate with relay switch over Modbus RTU serial protocol to control board power</summary>
 
 Directory `labgrid` includes minimal set of software components required to use this power switch in embedded board testing:
 * Labgrid [power driver](labgrid/src/modbus.py) for relay switch
