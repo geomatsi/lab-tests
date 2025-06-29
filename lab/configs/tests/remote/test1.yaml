@@ -1,0 +1,17 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: '=> '
+      ShellDriver:
+        login_prompt: '.*login: '
+        username: 'root'
+        prompt: '# '
+      UBootStrategy: {}
