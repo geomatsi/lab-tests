@@ -11,7 +11,7 @@ def test_poweroff(target, assume_shell):
 
     # Send a ping to check if we're in shell or U-Boot
     console.write(b'uname\n')
-    lines = console.read(size = 100, timeout = 5).decode(errors='ignore')
+    lines = console.read(size=100, timeout=5).decode(errors='ignore')
 
     if "Linux" in lines:
         # Linux shell

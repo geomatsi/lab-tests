@@ -2,6 +2,7 @@ import pytest
 
 from lg.modbus import ModbusTCPPowerDriver
 
+
 @pytest.fixture(scope='session')
 def command(target):
     return target
