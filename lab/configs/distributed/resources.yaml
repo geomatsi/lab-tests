@@ -1,5 +1,5 @@
-orangepi-pc-plus:
-  location: lab-slot1
+slot1:
+  location: home-lab
   USBSerialPort:
     match:
       ID_PATH: pci-0000:00:14.0-usb-0:2.2:1.0
@@ -7,8 +7,8 @@ orangepi-pc-plus:
   ModbusTCPCoil:
     host: 192.168.1.100
     coil: 6
-orangepi-zero2w:
-  location: lab-slot2
+slot2:
+  location: home-lab
   USBSerialPort:
     match:
       ID_PATH: pci-0000:00:14.0-usb-0:2.3:1.0
