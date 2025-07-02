@@ -6,7 +6,7 @@ targets:
     resources:
       USBSerialPort:
         match:
-          ID_PATH: pci-0000:00:14.0-usb-0:2.2:1.0
+          ID_PATH: pci-0000:00:14.0-usb-0:2.3:1.0
       ModbusTCPCoil:
         host: 192.168.1.100
         coil: 6
