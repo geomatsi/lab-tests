@@ -1,0 +1,24 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      TFTPProviderDriver: {}
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: '=> '
+        boot_command: 'setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.10; ping $serverip; tftp slot1/zImage; boot'
+      ShellDriver:
+        login_prompt: '.*login: '
+        username: 'root'
+        prompt: '# '
+      UBootNetStrategy: {}
+
+images:
+  kernel: /path/to/Image
+  rootfs: /path/to/rootfs.cpio
+
