@@ -7,6 +7,9 @@ slot1:
   ModbusTCPCoil:
     host: 192.168.1.100
     coil: 6
+  TFTPProvider:
+    internal: "/srv/atftp/slot1/"
+    external: "slot1/"
 slot2:
   location: home-lab
   USBSerialPort:
@@ -16,3 +19,6 @@ slot2:
   ModbusTCPCoil:
     host: 192.168.1.100
     coil: 5
+  TFTPProvider:
+    internal: "/srv/atftp/slot2/"
+    external: "slot2/"
