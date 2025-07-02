@@ -40,6 +40,11 @@ class UBootNetStrategy(Strategy):
         else:
             self.kernel = None
 
+        if config.data['images'].get('dtb', '') != '':
+            self.dtb = config.get_image_path('dtb')
+        else:
+            self.dtb = None
+
         if config.data['images'].get('rootfs', '') != '':
             self.rootfs = config.get_image_path('rootfs')
         else:
@@ -73,6 +78,10 @@ class UBootNetStrategy(Strategy):
             # copy Linux kernel to tftp directory on exporter if it exists
             if self.kernel:
                 self.tftp.stage(self.kernel)
+
+            # copy Linux DTB to tftp directory on exporter if it exists
+            if self.dtb:
+                self.tftp.stage(self.dtb)
 
             # copy Linux rootfs to tftp directory on exporter if it exists
             if self.rootfs:
