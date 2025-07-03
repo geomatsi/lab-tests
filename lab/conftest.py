@@ -24,6 +24,7 @@ def in_shell(strategy, capsys):
 @pytest.fixture(scope="function")
 def restart_shell(strategy, capsys):
     with capsys.disabled():
+        strategy.force("off")
         strategy.transition("shell")
 
 
