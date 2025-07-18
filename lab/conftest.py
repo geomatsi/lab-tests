@@ -2,6 +2,7 @@ import pytest
 
 from lg.modbus import ModbusTCPPowerDriver
 from lg.ubootnetstrategy import UBootNetStrategy
+from lg.doublebootstrategy import DoubleBootStrategy
 
 
 @pytest.fixture(scope='session')

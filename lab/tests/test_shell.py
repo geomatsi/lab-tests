@@ -10,7 +10,7 @@ from utils import mgmt
 
 def test_boot(target, in_shell):
     """Basic Linux boot test"""
-    command = target.get_driver('ShellDriver')
+    command = target.get_driver('ShellDriver', name='test')
     stdout, stderr, returncode = command.run('dmesg')
 
     assert returncode == 0
@@ -23,7 +23,7 @@ def test_boot(target, in_shell):
 
 def test_version(target, in_shell):
     """Basic Linux prompt test"""
-    command = target.get_driver('ShellDriver')
+    command = target.get_driver('ShellDriver', name='test')
     stdout, stderr, returncode = command.run('cat /proc/version')
     assert returncode == 0
     assert stdout
@@ -33,7 +33,7 @@ def test_version(target, in_shell):
 
 def test_linux_hackbench(target, in_shell):
     """Basic hackbench test"""
-    command = target.get_driver('ShellDriver')
+    command = target.get_driver('ShellDriver', name='test')
 
     try:
         command.run_check('which hackbench')
@@ -54,7 +54,7 @@ def test_linux_hackbench(target, in_shell):
 
 def test_net_ping(target, in_shell):
     """Basic ping test"""
-    command = target.get_driver('ShellDriver')
+    command = target.get_driver('ShellDriver', name='test')
 
     try:
         command.run_check("ping -c 3 {}".format(mgmt.MGMT_SERVER_ADDR))
