@@ -1,0 +1,55 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+      NetworkService:
+        address: 192.168.88.30
+        username: root
+        password: root
+    drivers:
+    - TFTPProviderDriver: {}
+    - SerialDriver: {}
+    - ModbusTCPPowerDriver:
+      cls: 'ModbusTCPPowerDriver'
+      delay: 0.5
+      downtime: 3.0
+    - UBootDriver:
+      cls: 'UBootDriver'
+      prompt: '=> '
+      #boot_command: 'ext4load mmc 0:1 $kernel_addr_r /boot/test/zImage; ext4load mmc 0:1 $fdt_addr_r /boot/test/sun8i-h3-orangepi-pc-plus.dtb; ext4load mmc 0:1 $ramdisk_addr_r /boot/test/rootfs.cpio; bootz $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r'
+      boot_command: 'ext4load mmc 0:1 $kernel_addr_r /boot/test/zImage; ext4load mmc 0:1 $fdt_addr_r /boot/test/sun8i-h3-orangepi-pc-plus.dtb; bootz $kernel_addr_r - $fdt_addr_r'
+      boot_timeout: 120
+    - ShellDriver:
+      cls: 'ShellDriver'
+      name: 'setup'
+      login_timeout: 60 
+      login_prompt: '.*login: '
+      username: 'root'
+      password: 'root'
+      prompt: 'setup# '
+    - ShellDriver:
+      cls: 'ShellDriver'
+      name: 'test'
+      login_timeout: 60 
+      login_prompt: '.*login: '
+      username: 'root'
+      password: 'root'
+      prompt: '# '
+    - SSHDriver:
+      cls: 'SSHDriver'
+      explicit_sftp_mode: False
+      explicit_scp_mode: True
+    - DoubleBootStrategy:
+      cls: 'DoubleBootStrategy'
+      bindings:
+        'setup_shell': 'setup'
+        'test_shell': 'test'
+
+paths:
+  test: /boot/test
+
+images:
+  kernel: /path/to/images/orangepi-pc-plus/zImage
+  #rootfs: /path/to/images/orangepi-pc-plus/rootfs.cpio 
+  dtb:    /path/to/images/orangepi-pc-plus/sun8i-h3-orangepi-pc-plus.dtb

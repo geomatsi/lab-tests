@@ -13,6 +13,7 @@ targets:
         prompt: '=> '
         boot_command: 'setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.10; ping $serverip; tftp slot1/zImage; boot'
       ShellDriver:
+        name: 'test'
         login_prompt: '.*login: '
         username: 'root'
         prompt: '# '
