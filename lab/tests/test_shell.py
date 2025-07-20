@@ -62,3 +62,25 @@ def test_net_ping(target, in_shell):
         pytest.fail("Failed to execute ping")
     except pexpect.exceptions.TIMEOUT:
         pytest.fail("Ping command timed out")
+
+
+def test_reboot_resilience(target, restart_shell):
+    """basic linux boot test"""
+    command = target.get_driver('ShellDriver', name='test')
+
+    try:
+        stdout, stderr, ret = command.run('dmesg')
+        splats = linux.check_kernel_bootlog(stdout)
+        if splats:
+            pytest.fail(f"kernel boot log issues: {splats}")
+        if ret:
+            pytest.fail(f"kernel dmesg returned error: {ret}")
+        if stderr:
+            pytest.fail(f"kernel dmesg stderr not empty: {stderr}")
+    except ExecutionError:
+        pytest.fail("kernel dmesg execution failed")
+    except pexpect.exceptions.timeout:
+        pytest.fail("kernel dmesg execution timed out")
+    finally:
+        command.run("sync")
+        command.run("sync")
