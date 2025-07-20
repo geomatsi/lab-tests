@@ -50,14 +50,13 @@ class UBootNetStrategy(Strategy):
         else:
             self.rootfs = None
 
-
     def transition(self, status):
         if not isinstance(status, Status):
             status = Status[status]
         if status == Status.unknown:
             raise StrategyError(f"can not transition to {status}")
         elif status == self.status:
-            return # nothing to do
+            return
         elif status == Status.off:
             self.target.deactivate(self.console)
             self.target.activate(self.power)

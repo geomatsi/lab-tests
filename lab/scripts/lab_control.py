@@ -42,8 +42,9 @@ def create_parser():
     subparsers = parser.add_subparsers(help='commands')
 
     # global options
-    parser.add_argument('-c', '--configuration', action='store', type=str, default="workspace/test.yaml",
-                        required=False, dest='conf', help='Lab configuration file')
+    parser.add_argument('-c', '--configuration', action='store', type=str,
+                        default="workspace/test.yaml", required=False,
+                        dest='conf', help='Lab configuration file')
     parser.add_argument('-s', '--slot', action='store', type=str, default="slot2",
                         required=False, dest='slot', help='Lab test slot')
     parser.add_argument('-v', '--verbose', action='store_true', required=False,
@@ -53,7 +54,7 @@ def create_parser():
     power_parser = subparsers.add_parser('power', help='slot power commands')
     supported_actions = ['on', 'off', 'cycle', 'get']
     power_parser.add_argument('action', action='store', type=str,
-                               choices=supported_actions, help='slot power command command')
+                              choices=supported_actions, help='slot power command command')
     power_parser.set_defaults(func=cmd_power)
 
     return parser
