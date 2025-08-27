@@ -6,7 +6,7 @@ targets:
     drivers:
       SerialDriver: {}
       ModbusTCPPowerDriver:
-        delay: 0.5
+        delay: 1.0
         downtime: 3.0
       UBootDriver:
         prompt: '=> '
@@ -15,5 +15,5 @@ targets:
         login_prompt: '.*login: '
         username: 'root'
         password: 'root'
-        prompt: '# '
+        prompt: 'setup# '
       UBootStrategy: {}

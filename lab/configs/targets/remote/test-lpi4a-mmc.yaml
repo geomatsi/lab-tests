@@ -1,0 +1,24 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: 'Light LPI4A# '
+        boot_command: 'boot'
+        boot_timeout: 60
+      ShellDriver:
+        name: 'test'
+        login_prompt: '.*login: '
+        #username: 'sipeed'
+        #password: 'licheepi'
+        #prompt: 'root@lpi4a:~# '
+        username: 'root'
+        password: 'root'
+        prompt: '.*lpi4a:~# '
+      UBootStrategy: {}

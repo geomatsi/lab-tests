@@ -1,6 +1,3 @@
-# slot#2
-# - serial: PL2303 on USB port #1
-# - power: DTWonder port #5
 targets:
   main:
     resources:
@@ -9,7 +6,7 @@ targets:
           ID_PATH: pci-0000:00:14.0-usb-0:2.2:1.0
       ModbusTCPCoil:
         host: 192.168.1.100
-        coil: 5
+        coil: 4
     drivers:
       SerialDriver: {}
       ModbusTCPPowerDriver:

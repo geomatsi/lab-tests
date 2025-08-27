@@ -4,7 +4,7 @@ targets:
       RemotePlace:
         name: !template ${LG_PLACE}
       NetworkService:
-        address: 192.168.88.30
+        address: orangepipcplus.local
         username: root
         password: root
     drivers:
@@ -17,8 +17,7 @@ targets:
     - UBootDriver:
       cls: 'UBootDriver'
       prompt: '=> '
-      #boot_command: 'ext4load mmc 0:1 $kernel_addr_r /boot/test/zImage; ext4load mmc 0:1 $fdt_addr_r /boot/test/sun8i-h3-orangepi-pc-plus.dtb; ext4load mmc 0:1 $ramdisk_addr_r /boot/test/rootfs.cpio; bootz $kernel_addr_r $ramdisk_addr_r:$filesize $fdt_addr_r'
-      boot_command: 'ext4load mmc 0:1 $kernel_addr_r /boot/test/zImage; ext4load mmc 0:1 $fdt_addr_r /boot/test/sun8i-h3-orangepi-pc-plus.dtb; bootz $kernel_addr_r - $fdt_addr_r'
+      boot_command: !template "ext4load mmc 0:1 $$kernel_addr_r /boot/test/$LG_LINUX; ext4load mmc 0:1 $$fdt_addr_r /boot/test/$LG_DTB; bootz $$kernel_addr_r - $$fdt_addr_r"
       boot_timeout: 120
     - ShellDriver:
       cls: 'ShellDriver'
@@ -50,6 +49,5 @@ paths:
   test: /boot/test
 
 images:
-  kernel: /path/to/images/orangepi-pc-plus/zImage
-  #rootfs: /path/to/images/orangepi-pc-plus/rootfs.cpio 
-  dtb:    /path/to/images/orangepi-pc-plus/sun8i-h3-orangepi-pc-plus.dtb
+  kernel: !template $LG_IMAGES/$LG_LINUX
+  dtb:    !template $LG_IMAGES/$LG_DTB

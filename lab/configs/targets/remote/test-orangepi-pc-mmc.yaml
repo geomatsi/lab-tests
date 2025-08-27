@@ -1,15 +1,8 @@
-# slot#1
-# - serial: PL2303 on USB port #2
-# - power: DTWonder port #6
 targets:
   main:
     resources:
-      USBSerialPort:
-        match:
-          ID_PATH: pci-0000:00:14.0-usb-0:2.3:1.0
-      ModbusTCPCoil:
-        host: 192.168.1.100
-        coil: 6
+      RemotePlace:
+        name: !template ${LG_PLACE}
     drivers:
       SerialDriver: {}
       ModbusTCPPowerDriver:
@@ -18,7 +11,9 @@ targets:
       UBootDriver:
         prompt: '=> '
       ShellDriver:
+        name: 'test'
         login_prompt: '.*login: '
         username: 'root'
-        prompt: '# '
+        password: 'root'
+        prompt: 'setup# '
       UBootStrategy: {}
