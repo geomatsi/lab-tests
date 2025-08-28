@@ -1,0 +1,26 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      TFTPProviderDriver: {}
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: 'Light LPI4A# '
+        boot_command: !template 'setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.80; ping $$serverip; tftp $$kernel_addr_r $LG_PLACE/$LG_LINUX; tftp $$fdt_addr_r $LG_PLACE/$LG_DTB; load mmc $$mmcdev:$$mmcbootpart $$opensbi_addr fw_dynamic.bin;  setenv bootargs "console=ttyS0,115200"; booti $$kernel_addr_r - $$fdt_addr_r'
+        boot_timeout: 120
+      ShellDriver:
+        name: 'test'
+        login_prompt: '.*login: '
+        username: 'root'
+        password: 'root'
+        prompt: '# '
+      UBootNetStrategy: {}
+
+images:
+  kernel: !template $LG_IMAGES/$LG_LINUX
+  dtb:    !template $LG_IMAGES/$LG_DTB
