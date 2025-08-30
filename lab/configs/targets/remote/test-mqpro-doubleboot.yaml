@@ -22,7 +22,7 @@ targets:
     - ShellDriver:
       cls: 'ShellDriver'
       name: 'setup'
-      login_timeout: 60 
+      login_timeout: 60
       login_prompt: '.*login: '
       username: 'root'
       password: 'root'
@@ -30,7 +30,7 @@ targets:
     - ShellDriver:
       cls: 'ShellDriver'
       name: 'test'
-      login_timeout: 60 
+      login_timeout: 60
       login_prompt: '.*login: '
       username: 'root'
       password: 'root'
