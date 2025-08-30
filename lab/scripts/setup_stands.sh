@@ -1,7 +1,6 @@
 #!/bin/bash
 
-labgrid-client -p test1 create
-labgrid-client -p test1 add-match 'webb/slot1/*'
-
-labgrid-client -p test2 create
-labgrid-client -p test2 add-match 'webb/slot2/*'
+for i in `seq 1 8`; do
+	labgrid-client -p slot$i create
+	labgrid-client -p slot$i add-match "webb/slot$i/*"
+done
