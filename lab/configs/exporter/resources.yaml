@@ -24,6 +24,9 @@ slot2:
     external: "slot2/"
 slot3:
   location: home-lab
+  USBFlashableDevice:
+    match:
+      ID_PATH: pci-0000:00:14.0-usb-0:2.4.1
   USBSerialPort:
     match:
       ID_PATH: pci-0000:00:14.0-usb-0:2.2:1.0
