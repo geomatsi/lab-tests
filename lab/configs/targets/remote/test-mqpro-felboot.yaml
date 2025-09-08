@@ -1,0 +1,35 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      SunxiFELDriver:
+        flasher: 'xfel'
+        dram_type: 'd1'
+        dram_prompt: 'DRAM simple test OK.'
+        exec: '0x20000'
+        images: {
+          'jumper' : '0x20000',
+          'opensbi': '0x40000000',
+          'dtb'    : '0x44200000',
+          'kernel' : '0x40200000',
+        }
+      ShellDriver:
+        name: 'test'
+        login_timeout: 300
+        login_prompt: '.*login: '
+        username: 'root'
+        password: 'root'
+        prompt: '# '
+      SunxiFELStrategy: {}
+
+images:
+  jumper:  !template $LG_IMAGES/$LG_JUMPER
+  opensbi: !template $LG_IMAGES/$LG_OPENSBI
+  dtb:     !template $LG_IMAGES/$LG_DTB
+  kernel:  !template $LG_IMAGES/$LG_LINUX
