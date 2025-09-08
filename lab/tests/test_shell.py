@@ -8,7 +8,7 @@ from utils import linux
 from utils import mgmt
 
 
-def test_boot(target, in_shell):
+def test_boot(target, restart_shell):
     """Basic Linux boot test"""
     command = target.get_driver('ShellDriver', name='test')
     stdout, stderr, returncode = command.run('dmesg')
