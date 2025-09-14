@@ -16,7 +16,7 @@ targets:
         images: {
           'jumper' : '0x20000',
           'opensbi': '0x40000000',
-          'dtb'    : '0x44200000',
+          'dtb'    : '0x48200000',
           'kernel' : '0x40200000',
         }
       ShellDriver:
