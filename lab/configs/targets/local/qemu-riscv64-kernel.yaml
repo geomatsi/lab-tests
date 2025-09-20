@@ -1,4 +1,4 @@
-# QEMU: kernel image
+# Linux kernel boot with default opensbi provided by QEMU
 targets:
   main:
     drivers:
