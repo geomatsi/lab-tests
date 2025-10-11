@@ -1,0 +1,24 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      KendryteFlashDriver:
+        flasher: 'kflash'
+        board: 'bit_mic'
+        baudrate: 1500000
+        image: 'kernel'
+      ShellDriver:
+        name: 'test'
+        login_prompt: '.*login: '
+        username: 'root'
+        prompt: '~ # '
+      KendryteStrategy: {}
+
+images:
+  kernel:  !template $LG_IMAGES/$LG_LINUX
