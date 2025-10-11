@@ -65,7 +65,8 @@ slot6:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: UNKNOWN
+      ID_SERIAL_SHORT: 4D5285A6EC
+      ID_USB_INTERFACE_NUM: '00'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
