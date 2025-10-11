@@ -3,9 +3,11 @@ import pytest
 from lg.doublebootstrategy import DoubleBootStrategy
 from lg.ubootnetstrategy import UBootNetStrategy
 from lg.sunxifelstrategy import SunxiFELStrategy
+from lg.kendrytestrategy import KendryteStrategy
 
-from lg.sunxifeldriver import SunxiFELDriver
 from lg.modbus import ModbusTCPPowerDriver
+from lg.sunxifeldriver import SunxiFELDriver
+from lg.kendryteflashdriver import KendryteFlashDriver
 
 
 @pytest.fixture(scope='session')
