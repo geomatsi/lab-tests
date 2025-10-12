@@ -45,13 +45,18 @@ class KendryteStrategy(Strategy):
             self.power.off()
         elif status == Status.flash:
             self.transition(Status.off)
-            self.power.cycle()
+            self.power.on()
             # wait for serial device to appear after power-on
             self.target.await_resources(self.target.resources)
+            # hack: flush console
+            self.target.activate(self.console)
+            self.target.deactivate(self.console)
+            # now use serial port to flash kendryte board
             self.target.activate(self.flasher)
             self.flasher.flash()
         elif status == Status.shell:
             self.transition(Status.flash)
+            self.target.activate(self.console)
             self.target.activate(self.shell)
         else:
             raise StrategyError(f"no transition found from {self.status} to {status}")
@@ -66,9 +71,10 @@ class KendryteStrategy(Strategy):
         if status == Status.off:
             self.target.deactivate_all_drivers()
             self.target.activate(self.power)
+            self.power.off()
         elif status == Status.flash:
-            self.target.activate(self.console)
             self.target.activate(self.flasher)
+            self.flasher.flash()
         elif status == Status.shell:
             self.target.activate(self.shell)
         else:
