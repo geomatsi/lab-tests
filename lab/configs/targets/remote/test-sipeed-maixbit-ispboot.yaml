@@ -6,13 +6,14 @@ targets:
     drivers:
       SerialDriver: {}
       ModbusTCPPowerDriver:
-        delay: 0.5
+        delay: 2.0
         downtime: 3.0
       KendryteFlashDriver:
-        flasher: 'kflash'
+        flasher: 'ktool.py'
         board: 'bit_mic'
         baudrate: 1500000
         image: 'kernel'
+        prompt: 'Rebooting...'
       ShellDriver:
         name: 'test'
         login_prompt: '.*login: '
