@@ -1,0 +1,23 @@
+# Linux kernel boot with default opensbi provided by QEMU
+targets:
+  main:
+    drivers:
+      QEMUDriver:
+        qemu_bin: qemu-system-riscv32
+        machine: virt
+        cpu: rv32
+        memory: '1G'
+        kernel: kernel
+        extra_args: '-smp 4 -netdev user,id=net0 -device virtio-net-device,netdev=net0'
+      ShellDriver:
+        name: 'test'
+        login_prompt: " login: "
+        prompt: "# "
+        username: "root"
+        password: "root"
+      ShellStrategy: {}
+images:
+  kernel: !template $LG_IMAGES/$LG_LINUX
+
+tools:
+  qemu-system-riscv32: !template $LG_QEMU_RISCV32
