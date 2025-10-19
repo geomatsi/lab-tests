@@ -3,9 +3,9 @@ targets:
   main:
     drivers:
       QEMUDriver:
-        qemu_bin: qemu-system-riscv64
+        qemu_bin: qemu-system-riscv32
         machine: virt
-        cpu: rv64,mmu=off
+        cpu: rv32,mmu=off
         memory: '1G'
         kernel: kernel
         extra_args: '-smp 4 -bios none -netdev user,id=net0 -device virtio-net-device,netdev=net0'
@@ -14,9 +14,10 @@ targets:
         login_prompt: " login: "
         prompt: "~ # "
         username: "root"
+        password: "root"
       ShellStrategy: {}
 images:
   kernel: !template $LG_IMAGES/$LG_LINUX
 
 tools:
-  qemu-system-riscv64: !template $LG_QEMU_RISCV64
+  qemu-system-riscv32: !template $LG_QEMU_RISCV32
