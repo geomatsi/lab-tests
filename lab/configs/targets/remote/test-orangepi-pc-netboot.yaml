@@ -11,7 +11,7 @@ targets:
         downtime: 3.0
       UBootDriver:
         prompt: '=> '
-        boot_command: !template 'setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.10; ping $$serverip; tftp $$kernel_addr_r $LG_PLACE/$LG_LINUX; tftp $$fdt_addr_r $LG_PLACE/$LG_DTB; setenv bootargs "console=ttyS0,115200"; bootz $$kernel_addr_r - $$fdt_addr_r'
+        boot_command: !template 'setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.20; ping $$serverip; tftp $$kernel_addr_r $LG_PLACE/$LG_LINUX; tftp $$fdt_addr_r $LG_PLACE/$LG_DTB; setenv bootargs "console=ttyS0,115200"; bootz $$kernel_addr_r - $$fdt_addr_r'
         boot_timeout: 120
       ShellDriver:
         name: 'test'
