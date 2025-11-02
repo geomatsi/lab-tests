@@ -27,6 +27,10 @@ class UBootNetStrategy(Strategy):
     }
 
     status = attr.ib(default=Status.unknown)
+    late_console = attr.ib(
+        default=None,
+        validator=attr.validators.optional(attr.validators.instance_of(bool))
+    )
 
     def __attrs_post_init__(self):
         super().__attrs_post_init__()
@@ -58,14 +62,19 @@ class UBootNetStrategy(Strategy):
         elif status == self.status:
             return
         elif status == Status.off:
-            self.target.deactivate(self.console)
+            self.target.deactivate_all_drivers()
             self.target.activate(self.power)
             self.power.off()
         elif status == Status.uboot:
             self.transition(Status.off)
-            self.target.activate(self.console)
+            if not self.late_console:
+                self.target.activate(self.console)
             # cycle power
             self.power.cycle()
+            if self.late_console:
+                # wait for serial device to appear after power-on
+                self.target.await_resources(self.target.resources)
+                self.target.activate(self.console)
             # interrupt uboot
             self.target.activate(self.uboot)
         elif status == Status.shell:
@@ -98,8 +107,11 @@ class UBootNetStrategy(Strategy):
         if not isinstance(status, Status):
             status = Status[status]
         if status == Status.off:
+            self.target.deactivate_all_drivers()
             self.target.activate(self.power)
+            self.power.off()
         elif status == Status.uboot:
+            self.target.activate(self.console)
             self.target.activate(self.uboot)
         elif status == Status.shell:
             self.target.activate(self.shell)
