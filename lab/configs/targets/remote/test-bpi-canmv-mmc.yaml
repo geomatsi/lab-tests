@@ -1,0 +1,21 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: !template ${LG_PLACE}
+    drivers:
+      SerialDriver: {}
+      ModbusTCPPowerDriver:
+        delay: 0.5
+        downtime: 3.0
+      UBootDriver:
+        prompt: 'K230# '
+        boot_command: 'boot'
+        boot_timeout: 60
+      ShellDriver:
+        name: 'test'
+        login_prompt: 'canaan login: '
+        username: 'root'
+        password: 'root'
+        prompt: '\[root@canaan ~ \]#'
+      UBootStrategy: {}
