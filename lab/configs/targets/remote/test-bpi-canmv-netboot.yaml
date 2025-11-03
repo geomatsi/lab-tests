@@ -11,7 +11,7 @@ targets:
         downtime: 3.0
       UBootDriver:
         prompt: 'K230# '
-        boot_command: 'usb start; setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.10; ping $serverip; ext4load mmc 1:1 0x4500000 /fw_jump_add_uboot_head.bin; tftp 0x200000 slot1/Image; tftp 0x4600000 slot1/bpi.dtb; bootm 0x4500000 - 0x4600000'
+        boot_command: 'usb start; setenv serverip 192.168.1.1; setenv ipaddr 192.168.1.10; ping $serverip; ext4load mmc 1:1 0x4500000 /fw_jump_add_uboot_head.bin; tftp 0x200000 slot1/Image; tftp 0x4600000 slot1/bananapi-canmv-k230d-zero.dtb; bootm 0x4500000 - 0x4600000'
         boot_timeout: 60
       ShellDriver:
         name: 'test'
@@ -19,7 +19,8 @@ targets:
         username: 'root'
         password: 'root'
         prompt: '# '
-      UBootNetStrategy: {}
+      UBootNetStrategy:
+        late_console: on
 
 images:
   kernel: !template $LG_IMAGES/$LG_LINUX
