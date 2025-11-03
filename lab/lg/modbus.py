@@ -22,8 +22,8 @@ class ModbusTCPPowerDriver(Driver, PowerProtocol):
     downtime = attr.ib(default=1.0, validator=attr.validators.instance_of(float))
     delay = attr.ib(default=0.5, validator=attr.validators.instance_of(float))
 
-    retry_delay = attr.ib(default=1.0, validator=attr.validators.instance_of(float))
-    retries = attr.ib(default=3, validator=attr.validators.instance_of(int))
+    retry_delay = attr.ib(default=0.5, validator=attr.validators.instance_of(float))
+    retries = attr.ib(default=4, validator=attr.validators.instance_of(int))
 
     def __attrs_post_init__(self):
         super().__attrs_post_init__()
@@ -41,20 +41,19 @@ class ModbusTCPPowerDriver(Driver, PowerProtocol):
                 try:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.connect((self.host, int(self.port)))
+                    self.sock = sock
+                    func(self, *args, **kwargs)
                     break
-                except OSError as e:
+                except Exception as e:
                     sock.close()
+                    self.sock = None
 
                     if t < self.retries:
                         time.sleep(self.retry_delay)
                     else:
                         raise e
 
-            try:
-                self.sock = sock
-                # ready to go: perform the requested power mgmt operation
-                func(self, *args, **kwargs)
-            finally:
+            if self.sock:
                 self.sock.close()
                 self.sock = None
 
