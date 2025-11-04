@@ -15,6 +15,31 @@ def command(target):
     return target
 
 
+@pytest.fixture(scope='session', autouse=True)
+def poweroff(target, request):
+    # session startup
+    yield
+    # session teardown
+    if request.config.getoption("--poweroff"):
+        strategy = target.get_strategy()
+
+        # try gracefull shutdown if Linux shell is running
+        try:
+            console = target.get_driver("ConsoleProtocol")
+            console.write(b'uname\n')
+            lines = console.read(size=100, timeout=5).decode(errors='ignore')
+            if "Linux" in lines:
+                shell = target.get_driver("ShellDriver")
+                shell.run('uname -a')
+                shell.run('sync')
+                shell.run('sync')
+        except:
+            # ignore anything here, just turn off the power
+            pass
+        finally:
+            strategy.transition("off")
+
+
 @pytest.fixture(scope="function")
 def in_uboot(strategy, capsys):
     with capsys.disabled():
@@ -44,6 +69,7 @@ def assume_shell(strategy, capsys):
 
 def pytest_addoption(parser):
     parser.addoption('--repeat', action='store', help='Repeat test the specified number of times')
+    parser.addoption('--poweroff', action='store_const', const=True, help='Power off device after test completion')
 
 
 def pytest_generate_tests(metafunc):
