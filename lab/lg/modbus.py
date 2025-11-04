@@ -37,12 +37,13 @@ class ModbusTCPPowerDriver(Driver, PowerProtocol):
         def wrapper(self, *args, **kwargs):
             # try to connect to Modbus TCP server with retries
             sock = None
+            res = None
             for t in range(1, self.retries + 1):
                 try:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.connect((self.host, int(self.port)))
                     self.sock = sock
-                    func(self, *args, **kwargs)
+                    res = func(self, *args, **kwargs)
                     break
                 except Exception as e:
                     sock.close()
@@ -56,6 +57,8 @@ class ModbusTCPPowerDriver(Driver, PowerProtocol):
             if self.sock:
                 self.sock.close()
                 self.sock = None
+
+            return res
 
         return wrapper
 
