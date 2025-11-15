@@ -69,7 +69,7 @@ class KendryteFlashDriver(Driver):
 
         # kflash -b 1500000 -B bit_mic -p /dev/ttyUSB1 /path/to/loader.bin
         cmd = [self.flasher, '-B', self.board, '-b', str(self.baudrate), '-p', self.device.extra.get("path"), remote_image]
-        self.logger.info("Running exec command '%s'", " ".join(cmd))
+        self.logger.info(f"Running exec command {cmd}")
         output = processwrapper.check_output(self.device.command_prefix + cmd, print_on_silent_log=True).decode('ascii')
 
         if self.prompt:
