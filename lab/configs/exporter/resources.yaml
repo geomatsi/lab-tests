@@ -2,7 +2,8 @@ slot1:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.4.3:1.0
+      ID_SERIAL_SHORT: '5893059716'
+      ID_USB_INTERFACE_NUM: '00'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -14,7 +15,8 @@ slot2:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.4.4:1.1
+      ID_SERIAL_SHORT: '0667FF485450827867143753'
+      ID_USB_INTERFACE_NUM: '01'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -26,10 +28,11 @@ slot3:
   location: home-lab
   USBFlashableDevice:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.4.1
+      ID_PATH: pci-0000:00:14.0-usb-0:2.1.2:1.0
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.1:1.0
+      ID_SERIAL_SHORT: 'BC0441ABCD'
+      ID_USB_INTERFACE_NUM: '00'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -41,7 +44,7 @@ slot4:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.2:1.0
+      ID_PATH: EMPTY
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -53,7 +56,8 @@ slot5:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.1:1.2
+      ID_SERIAL_SHORT: 'BC0441ABCD'
+      ID_USB_INTERFACE_NUM: '02'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -65,7 +69,7 @@ slot6:
   location: home-lab
   USBSerialPort:
     match:
-      ID_SERIAL_SHORT: 4D5285A6EC
+      ID_SERIAL_SHORT: '4D5285A6EC'
       ID_USB_INTERFACE_NUM: '00'
     speed: 115200
   ModbusTCPCoil:
@@ -78,7 +82,7 @@ slot7:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: UNKNOWN
+      ID_PATH: EMPTY
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
@@ -90,7 +94,8 @@ slot8:
   location: home-lab
   USBSerialPort:
     match:
-      ID_PATH: pci-0000:00:14.0-usb-0:2.3:1.0
+      ID_SERIAL_SHORT: 'A50285BI'
+      ID_USB_INTERFACE_NUM: '00'
     speed: 115200
   ModbusTCPCoil:
     host: 192.168.1.100
