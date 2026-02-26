@@ -8,6 +8,7 @@ targets:
         cpu: rv32
         memory: '1G'
         kernel: kernel
+        boot_args: 'earlycon=sbi console=ttyS0,115200'
         extra_args: '-smp 4 -netdev user,id=net0 -device virtio-net-device,netdev=net0'
       ShellDriver:
         name: 'test'
